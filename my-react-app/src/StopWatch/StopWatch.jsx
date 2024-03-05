@@ -46,7 +46,7 @@ function Stopwatch() {
   return (
     <div>
       <h1>Stopwatch</h1>
-      <div>{formatTime()}</div>
+      <div>Time: {formatTime()}</div>
       <button onClick={startStopwatch} disabled={isRunning}>
         Start
       </button>
