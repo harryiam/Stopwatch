@@ -22,23 +22,18 @@ function Stopwatch() {
     setIsRunning(true);
   };
 
-  const stopStopwatch = () => {
-    setIsRunning(false);
-  };
-
   const resetStopwatch = () => {
     setTime(0);
     setIsRunning(false);
   };
 
   const formatTime = () => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
+    const minutes = Math.floor(time / 60);
     const seconds = time % 60;
 
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
+    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
       .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      .padStart(2, '0')}`;
 
     return formattedTime;
   };
@@ -49,9 +44,6 @@ function Stopwatch() {
       <div>Time: {formatTime()}</div>
       <button onClick={startStopwatch} disabled={isRunning}>
         Start
-      </button>
-      <button onClick={stopStopwatch} disabled={!isRunning}>
-        Stop
       </button>
       <button onClick={resetStopwatch}>Reset</button>
     </div>
