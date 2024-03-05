@@ -9,7 +9,15 @@ function Stopwatch() {
 
     if (isRunning) {
       intervalId = setInterval(() => {
-        setTime(prevTime => prevTime + 1);
+        setTime(prevTime => {
+          // Check if the elapsed time has reached 2 minutes (120 seconds)
+          if (prevTime >= 120) {
+            clearInterval(intervalId);
+            setIsRunning(false);
+            return prevTime;
+          }
+          return prevTime + 1;
+        });
       }, 1000);
     } else {
       clearInterval(intervalId);
@@ -18,8 +26,8 @@ function Stopwatch() {
     return () => clearInterval(intervalId);
   }, [isRunning]);
 
-  const startStopwatch = () => {
-    setIsRunning(true);
+  const toggleStopwatch = () => {
+    setIsRunning(prevIsRunning => !prevIsRunning);
   };
 
   const resetStopwatch = () => {
@@ -28,12 +36,14 @@ function Stopwatch() {
   };
 
   const formatTime = () => {
+    if (time === 0) {
+      return '0:00';
+    }
+    
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
 
-    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
-      .toString()
-      .padStart(2, '0')}`;
+    const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
     return formattedTime;
   };
@@ -42,9 +52,11 @@ function Stopwatch() {
     <div>
       <h1>Stopwatch</h1>
       <div>Time: {formatTime()}</div>
-      <button onClick={startStopwatch} disabled={isRunning}>
-        Start
-      </button>
+      {isRunning ? (
+        <button onClick={toggleStopwatch}>Stop</button>
+      ) : (
+        <button onClick={toggleStopwatch}>Start</button>
+      )}
       <button onClick={resetStopwatch}>Reset</button>
     </div>
   );
